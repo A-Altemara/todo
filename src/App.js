@@ -2,56 +2,42 @@ import './App.css';
 import { useState } from 'react'
 
 function App() {
-  const [todos, setTodos] = useState([
-    {
-      text: 'learn react',
-      isCompleted: false,
-    },
-    {
-      text: 'meet friend for lunch',
-      isCompleted: false,
-    },
-    {
-      text: 'build todo app',
-      isCompleted: false,
-    }
-  ])
+  const [items, setItems] = useState([]);
+  const [value, setValue] = useState([]);
 
-  const [value, setValue] = useState('')
-
-  const handleSubmit = e => {
+  function handleSubmit(e) {
     e.preventDefault();
-    if (!value) return;
-    const newToDos = [...todos, { text: value, isCompleted: false }];
-    setTodos(newToDos);
-    setValue('')
-  }
-
-  const removeToDo = e => {
-    const index = Number(e.target.id)
-    let temp = [...todos];
-    temp.splice(index, 1);
-    setTodos(temp);
+    setItems([...items, value]);
+    setValue('');
   }
 
   return (
-    <>
-      <h1>To Do</h1>
-      {todos.map((todo, i) => (
-        <div className="todo" key={i} id={i} onClick={removeToDo}>{todo.text}</div>
-      ))}
-      {/* form should be broken out into another componenet */}
+    <div>
+      <h3>TODO</h3>
+      <TodoList items={items} />
       <form onSubmit={handleSubmit}>
+        <label htmlFor="new-todo">Add todo: </label>
         <input
-          type='text'
-          className='input'
+          id="new-todo"
           value={value}
-          placeholder="Add ToDo .."
-
+          placeholder="Add Todo..."
           onChange={e => setValue(e.target.value)}
         />
+        <button>
+          Add #{items.length + 1}
+        </button>
       </form>
-    </>
+    </div>
+  );
+}
+
+function TodoList(props) {
+  return (
+    <ul>
+      {props.items.map((item, i) => (
+        <li key={i}>{item}</li>
+      ))}
+    </ul>
   );
 }
 
